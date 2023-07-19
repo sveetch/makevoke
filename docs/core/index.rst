@@ -9,3 +9,4 @@ References
 
    exceptions.rst
    base.rst
+   printout.rst

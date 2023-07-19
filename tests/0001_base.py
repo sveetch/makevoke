@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+
 from invoke import MockContext, Result
 
 from makevoke.base import MakevokeBase
