@@ -7,7 +7,7 @@ from makevoke.printout import MakevokePrintOut
 from makevoke.utils import clean_ansi
 
 
-def test_printout_get_indent():
+def test_get_indent():
     """
     Method should return correct computed indentation.
     """
@@ -22,7 +22,7 @@ def test_printout_get_indent():
     assert CustomMakevoke.get_indent(4) == "----"
 
 
-def test_printout_yes_or_no():
+def test_yes_or_no():
     """
     Method should returns the right character depending value is True or False, and
     possibly colored with ANSI code depending 'colored' argument.
@@ -33,7 +33,7 @@ def test_printout_yes_or_no():
     assert MakevokePrintOut.yes_or_no(False, colored=False) == "✖"
 
 
-def test_printout_header_ansi(capsys):
+def test_header_ansi(capsys):
     """
     Header block should be rendered as expected.
 
@@ -140,7 +140,7 @@ def test_printout_header_ansi(capsys):
         "    ├── One\n    ├── Two\n    └── Three\n",
     ),
 ])
-def test_printout_basic_styles(capsys, text, style, options, expected):
+def test_basic_styles(capsys, text, style, options, expected):
     """
     All basic style methods should print out expected content. This is mostly about
     proper linebreaks and proper text content since we clean out all ANSI code from
@@ -155,7 +155,7 @@ def test_printout_basic_styles(capsys, text, style, options, expected):
     assert clean_ansi(captured.out) == expected
 
 
-def test_printout_critical(capsys):
+def test_critical(capsys):
     """
     Alike a basic style method but it should raise an Invoke 'Exit' exception.
     """
@@ -166,7 +166,7 @@ def test_printout_critical(capsys):
     assert clean_ansi(captured.out) == "\n  Critical block  \n\n"
 
 
-def test_printout_styleguide(capsys):
+def test_styleguide(capsys):
     """
     Method should output content using Makefile style methode without any error.
     """

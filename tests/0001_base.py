@@ -8,7 +8,7 @@ from makevoke.base import MakevokeBase
 from makevoke.exceptions import MakevokeContextError
 
 
-def test_base_get_context():
+def test_get_context():
     """
     Method get_context is pretty basic and should return all enabled context variables.
     """
@@ -21,7 +21,7 @@ def test_base_get_context():
     assert CustomMakevoke.get_context() == {"BASE_DIR": Path("."), "YEP": True}
 
 
-def test_base_get_context_error():
+def test_get_context_error():
     """
     Method get_context should return an explicit exceptions for required enabled
     context variables when they don't exist.
@@ -51,7 +51,7 @@ def test_base_get_context_error():
     )
 
 
-def test_base_run():
+def test_run():
     """
     Very basic test around Makevoke 'run' method since Invoke only provide Mocking
     stuff to test it.
