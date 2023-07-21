@@ -95,23 +95,3 @@ class MakevokeBase:
             commandline.format(**cls.get_context(extra=extra)),
             **kwargs,
         )
-
-
-class MakevokeVirtualEnvBase(MakevokeBase):
-    """
-    Base to set base context variables for a 'virtualenv' architecture.
-    """
-    BASE_DIR = Path(".")
-    PYTHON_INTERPRETER = "python3"
-    VENV_PATH = BASE_DIR / ".venv"
-    BIN_PATH = VENV_PATH / "bin"
-    PYTHON_BIN = BIN_PATH / "python"
-    INVOKE_BIN = BIN_PATH / "invoke"
-    ENABLED_CONTEXT_VARS = [
-        "BASE_DIR",
-        "BIN_PATH",
-        "ENABLED_CONTEXT_VARS",
-        "PYTHON_BIN",
-        "PYTHON_INTERPRETER",
-        "VENV_PATH",
-    ]
