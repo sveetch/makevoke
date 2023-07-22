@@ -3,7 +3,7 @@ import pytest
 from colorama import Fore, Back, Style
 from invoke.exceptions import Exit
 
-from makevoke.printout import MakevokePrintOut
+from makevoke.printout import PrintOutAbstract
 from makevoke.utils import clean_ansi
 
 
@@ -11,11 +11,11 @@ def test_get_indent():
     """
     Method should return correct computed indentation.
     """
-    assert MakevokePrintOut.get_indent(0) == ""
-    assert MakevokePrintOut.get_indent(1) == "    "
-    assert MakevokePrintOut.get_indent(2) == "        "
+    assert PrintOutAbstract.get_indent(0) == ""
+    assert PrintOutAbstract.get_indent(1) == "    "
+    assert PrintOutAbstract.get_indent(2) == "        "
 
-    class CustomMakevoke(MakevokePrintOut):
+    class CustomMakevoke(PrintOutAbstract):
         INDENT_STRING = "-"
 
     assert CustomMakevoke.get_indent(0) == ""
@@ -27,10 +27,10 @@ def test_yes_or_no():
     Method should returns the right character depending value is True or False, and
     possibly colored with ANSI code depending 'colored' argument.
     """
-    assert MakevokePrintOut.yes_or_no(True) == Fore.GREEN + "✔" + Style.RESET_ALL
-    assert MakevokePrintOut.yes_or_no(False) == Fore.RED + "✖" + Style.RESET_ALL
-    assert MakevokePrintOut.yes_or_no(True, colored=False) == "✔"
-    assert MakevokePrintOut.yes_or_no(False, colored=False) == "✖"
+    assert PrintOutAbstract.yes_or_no(True) == Fore.GREEN + "✔" + Style.RESET_ALL
+    assert PrintOutAbstract.yes_or_no(False) == Fore.RED + "✖" + Style.RESET_ALL
+    assert PrintOutAbstract.yes_or_no(True, colored=False) == "✔"
+    assert PrintOutAbstract.yes_or_no(False, colored=False) == "✖"
 
 
 def test_header_ansi(capsys):
@@ -40,7 +40,7 @@ def test_header_ansi(capsys):
     NOTE: This will be the only test to check about ANSI codes to avoid messing tests
     for no real value.
     """
-    MakevokePrintOut.header("Header")
+    PrintOutAbstract.header("Header")
 
     captured = capsys.readouterr()
     assert captured.out == (
@@ -147,9 +147,9 @@ def test_basic_styles(capsys, text, style, options, expected):
     result before to assert.
     """
     if not options:
-        getattr(MakevokePrintOut, style)(text)
+        getattr(PrintOutAbstract, style)(text)
     else:
-        getattr(MakevokePrintOut, style)(text, **options)
+        getattr(PrintOutAbstract, style)(text, **options)
 
     captured = capsys.readouterr()
     assert clean_ansi(captured.out) == expected
@@ -160,7 +160,7 @@ def test_critical(capsys):
     Alike a basic style method but it should raise an Invoke 'Exit' exception.
     """
     with pytest.raises(Exit):
-        MakevokePrintOut.critical("Critical block")
+        PrintOutAbstract.critical("Critical block")
 
     captured = capsys.readouterr()
     assert clean_ansi(captured.out) == "\n  Critical block  \n\n"
@@ -170,7 +170,7 @@ def test_styleguide(capsys):
     """
     Method should output content using Makefile style methode without any error.
     """
-    MakevokePrintOut.styleguide()
+    PrintOutAbstract.styleguide()
 
     captured = capsys.readouterr()
     assert len(clean_ansi(captured.out)) > 0

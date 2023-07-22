@@ -7,7 +7,7 @@ from colorama import Fore, Back, Style
 # just_fix_windows_console()
 
 
-class MakevokePrintOut:
+class PrintOutAbstract:
     """
     This class implements all methods to print out text with styles using normalized
     ANSI codes.
@@ -22,6 +22,7 @@ class MakevokePrintOut:
     HEADER_SURROUND = ("---> ", " <---")
     SUCCESS_SURROUND = ("  ", "  ")
     CRITICAL_SURROUND = ("  ", "  ")
+    BLOCK_SURROUND = ("  ", "  ")
     INDENT_STRING = "    "
 
     UnderlineAnsiCode = "\u001b[4m"
@@ -98,6 +99,31 @@ class MakevokePrintOut:
         print()
 
     @classmethod
+    def block_warning(cls, msg):
+        """
+        Print a message in white on yellow background and surrounded with linebreaks.
+
+        Arguments:
+            msg (string): A simple string to print out.
+        """
+
+        print()
+        print(
+            Back.YELLOW + Style.BRIGHT + cls.BLOCK_SURROUND[0] + str(msg) +
+            cls.BLOCK_SURROUND[1] + Style.RESET_ALL
+        )
+        print()
+
+    @classmethod
+    def success(cls, msg):
+        print()
+        print(
+            Back.GREEN + Style.BRIGHT + cls.SUCCESS_SURROUND[0] + str(msg) +
+            cls.SUCCESS_SURROUND[1] + Style.RESET_ALL
+        )
+        print()
+
+    @classmethod
     def error(cls, msg):
         """
         Print a message text in red.
@@ -116,22 +142,6 @@ class MakevokePrintOut:
             msg (string): A simple string to print out.
         """
         cls.error(cls.UnderlineAnsiCode + cls.BoldAnsiCode + msg)
-        print()
-
-    @classmethod
-    def success(cls, msg):
-        """
-        Print a message in white on green background and surrounded with spaces.
-
-        Arguments:
-            msg (string): A simple string to print out.
-        """
-
-        print()
-        print(
-            Back.GREEN + Style.BRIGHT + cls.SUCCESS_SURROUND[0] + str(msg) +
-            cls.SUCCESS_SURROUND[1] + Style.RESET_ALL
-        )
         print()
 
     @classmethod

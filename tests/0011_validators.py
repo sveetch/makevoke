@@ -4,12 +4,12 @@ import pytest
 
 from invoke.exceptions import Exit
 
-from makevoke.printout import MakevokePrintOut
-from makevoke.validators import MakevokeArgValidator
+from makevoke.printout import PrintOutAbstract
+from makevoke.validators import ArgValidatorAbstract
 from makevoke.utils import clean_ansi
 
 
-class MakevokePrintoutValidator(MakevokeArgValidator, MakevokePrintOut):
+class MakevokePrintoutValidator(ArgValidatorAbstract, PrintOutAbstract):
     pass
 
 

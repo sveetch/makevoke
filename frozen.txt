@@ -1,4 +1,4 @@
-# Frozen requirement versions from '0.2.0rc2' installation
+# Frozen requirement versions from '0.2.0rc4' installation
 colorama==0.4.6
 flake8==6.0.0
 invoke==2.2.0

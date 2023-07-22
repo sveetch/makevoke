@@ -1,14 +1,14 @@
 from pathlib import Path
 
 
-class MakevokeArgValidator:
+class ArgValidatorAbstract:
     """
     This class implements some useful common methods to validate arguments.
 
-    Depends on ``MakevokePrintOut`` abstract alike.
+    Depends on ``PrintOutAbstract`` abstract alike.
 
     Since it depends on printout methods, it requires to be associated with a class
-    which implements printout methods like in ``MakevokePrintOut``, either you use this
+    which implements printout methods like in ``PrintOutAbstract``, either you use this
     class or implement it with another printer solution.
     """
     @classmethod
