@@ -44,7 +44,7 @@ def test_header_ansi(capsys):
 
     captured = capsys.readouterr()
     assert captured.out == (
-        "\n" + Back.BLUE + Style.BRIGHT + "---> Header <---" + Style.RESET_ALL + "\n\n"
+        "\n" + Back.BLUE + Style.BRIGHT + "  Header  " + Style.RESET_ALL + "\n\n"
     )
 
 
@@ -56,22 +56,40 @@ def test_header_ansi(capsys):
         "Info\n",
     ),
     (
-        "Warning",
-        "warning",
-        {},
-        "Warning\n",
-    ),
-    (
-        "Error",
-        "error",
-        {},
-        "Error\n",
-    ),
-    (
         "Info title",
         "title_info",
         {},
         "Info title\n\n",
+    ),
+    (
+        "Info block",
+        "block_info",
+        {},
+        "\n  Info block  \n\n",
+    ),
+    (
+        "Success",
+        "success",
+        {},
+        "Success\n",
+    ),
+    (
+        "Success title",
+        "title_success",
+        {},
+        "Success title\n\n",
+    ),
+    (
+        "Success block",
+        "block_success",
+        {},
+        "\n  Success block  \n\n",
+    ),
+    (
+        "Warning",
+        "warning",
+        {},
+        "Warning\n",
     ),
     (
         "Warning title",
@@ -80,16 +98,28 @@ def test_header_ansi(capsys):
         "Warning title\n\n",
     ),
     (
+        "Warning block",
+        "block_warning",
+        {},
+        "\n  Warning block  \n\n",
+    ),
+    (
+        "Error",
+        "error",
+        {},
+        "Error\n",
+    ),
+    (
         "Error title",
         "title_error",
         {},
         "Error title\n\n",
     ),
     (
-        "Success block",
-        "success",
+        "Error block",
+        "block_error",
         {},
-        "\n  Success block  \n\n",
+        "\n  Error block  \n\n",
     ),
     (
         "Dotitem line",

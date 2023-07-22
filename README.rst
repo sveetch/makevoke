@@ -6,7 +6,15 @@
 Makevoke
 ========
 
-Common project Makefile implemented with Invoke
+Makefile is a useful tool but standing on shell scripting is not always easy to
+implement some tasks and also there are not really Windows compatible.
+
+This project gather many Python classes to help reproducing some common Makefile tasks
+with the flexibility of Python through Invoke tasks.
+
+There is no commandline, so it is not a "ready to use" project, you will need to
+create your tasks yourself using what this project provides.
+
 
 Dependancies
 ************

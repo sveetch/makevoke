@@ -3,25 +3,30 @@ from invoke.exceptions import Exit
 from colorama import Fore, Back, Style
 
 
-# TODO: Fix output for ANSI code support on windows
-# just_fix_windows_console()
-
-
 class PrintOutAbstract:
     """
     This class implements all methods to print out text with styles using normalized
     ANSI codes.
 
+    Many styles are based on common logging level:  info, success, warning and error.
+    ``debug`` level is not implemented since it should be a basic print without
+    any colors. And ``critical`` level is just an alias to ``block_error``.
+
+    Since this abstract stands on ``colorama`` package, it should be compatible with
+    windows if your script import and use the colorama fix: ::
+
+        from colorama import just_fix_windows_console
+
+        # Fix output for ANSI code support on windows
+        just_fix_windows_console()
+
     .. Note::
         ANSI code management may require to use a reset code that cannot be twice in
-        a same output (like from ``print()``), once used in an output all ANSI code
-        following are just ignored.
+        a same output (like from ``print()``), once used in an output all following
+        ANSI codes will just be ignored.
 
         Due to this, you may not be able to combine some styles.
     """
-    HEADER_SURROUND = ("---> ", " <---")
-    SUCCESS_SURROUND = ("  ", "  ")
-    CRITICAL_SURROUND = ("  ", "  ")
     BLOCK_SURROUND = ("  ", "  ")
     INDENT_STRING = "    "
 
@@ -42,22 +47,43 @@ class PrintOutAbstract:
         return cls.INDENT_STRING * indent
 
     @classmethod
-    def header(cls, msg):
+    def info(cls, msg):
         """
-        Print a message in white on blue background and surrounded.
+        Print a message text in blue.
+
+        Arguments:
+            msg (string): A simple string to print out.
+        """
+        print(Fore.BLUE + str(msg) + Style.RESET_ALL)
+
+    @classmethod
+    def title_info(cls, msg):
+        """
+        Print a title message text in bold and blue.
+
+        Arguments:
+            msg (string): A simple string to print out.
+        """
+        cls.info(cls.UnderlineAnsiCode + cls.BoldAnsiCode + msg)
+        print()
+
+    @classmethod
+    def block_info(cls, msg):
+        """
+        Print a block message text in bold and blue.
 
         Arguments:
             msg (string): A simple string to print out.
         """
         print()
         print(
-            Back.BLUE + Style.BRIGHT + cls.HEADER_SURROUND[0] + str(msg) +
-            cls.HEADER_SURROUND[1] + Style.RESET_ALL
+            Back.BLUE + Style.BRIGHT + cls.BLOCK_SURROUND[0] + str(msg) +
+            cls.BLOCK_SURROUND[1] + Style.RESET_ALL
         )
         print()
 
     @classmethod
-    def info(cls, msg):
+    def success(cls, msg):
         """
         Print a message text in green.
 
@@ -67,14 +93,29 @@ class PrintOutAbstract:
         print(Fore.GREEN + str(msg) + Style.RESET_ALL)
 
     @classmethod
-    def title_info(cls, msg):
+    def title_success(cls, msg):
         """
-        Print a message text in bold, green, underlined with a following empty line.
+        Print a title message text in bold and green.
 
         Arguments:
             msg (string): A simple string to print out.
         """
-        cls.info(cls.UnderlineAnsiCode + cls.BoldAnsiCode + msg)
+        cls.success(cls.UnderlineAnsiCode + cls.BoldAnsiCode + msg)
+        print()
+
+    @classmethod
+    def block_success(cls, msg):
+        """
+        Print a block message text in bold and green.
+
+        Arguments:
+            msg (string): A simple string to print out.
+        """
+        print()
+        print(
+            Back.GREEN + Style.BRIGHT + cls.BLOCK_SURROUND[0] + str(msg) +
+            cls.BLOCK_SURROUND[1] + Style.RESET_ALL
+        )
         print()
 
     @classmethod
@@ -90,7 +131,7 @@ class PrintOutAbstract:
     @classmethod
     def title_warning(cls, msg):
         """
-        Print a message text in bold, yellow, underlined with a following empty line.
+        Print a title message text in bold and yellow.
 
         Arguments:
             msg (string): A simple string to print out.
@@ -101,7 +142,7 @@ class PrintOutAbstract:
     @classmethod
     def block_warning(cls, msg):
         """
-        Print a message in white on yellow background and surrounded with linebreaks.
+        Print a block message in white on yellow background.
 
         Arguments:
             msg (string): A simple string to print out.
@@ -111,15 +152,6 @@ class PrintOutAbstract:
         print(
             Back.YELLOW + Style.BRIGHT + cls.BLOCK_SURROUND[0] + str(msg) +
             cls.BLOCK_SURROUND[1] + Style.RESET_ALL
-        )
-        print()
-
-    @classmethod
-    def success(cls, msg):
-        print()
-        print(
-            Back.GREEN + Style.BRIGHT + cls.SUCCESS_SURROUND[0] + str(msg) +
-            cls.SUCCESS_SURROUND[1] + Style.RESET_ALL
         )
         print()
 
@@ -136,7 +168,7 @@ class PrintOutAbstract:
     @classmethod
     def title_error(cls, msg):
         """
-        Print a message text in bold, red, underlined with a following empty line.
+        Print a title message text in bold and red.
 
         Arguments:
             msg (string): A simple string to print out.
@@ -145,7 +177,7 @@ class PrintOutAbstract:
         print()
 
     @classmethod
-    def critical(cls, msg):
+    def block_error(cls, msg):
         """
         Print an error message in white on red backgroun then raise Exit() exception
         to ensure correct exit code.
@@ -156,10 +188,31 @@ class PrintOutAbstract:
 
         print()
         print(
-            Back.RED + Style.BRIGHT + cls.CRITICAL_SURROUND[0] + str(msg) +
-            cls.CRITICAL_SURROUND[1] + Style.RESET_ALL
+            Back.RED + Style.BRIGHT + cls.BLOCK_SURROUND[0] + str(msg) +
+            cls.BLOCK_SURROUND[1] + Style.RESET_ALL
         )
         print()
+
+    @classmethod
+    def header(cls, msg):
+        """
+        Convenient alias to ``block_info``.
+
+        Arguments:
+            msg (string): A simple string to print out.
+        """
+        cls.block_info(msg)
+
+    @classmethod
+    def critical(cls, msg):
+        """
+        Convenient alias to ``block_error`` with addition of a ``invoke.Exit``
+        exception.
+
+        Arguments:
+            msg (string): A simple string to print out.
+        """
+        cls.block_error(msg)
         raise Exit()
 
     @classmethod
@@ -274,29 +327,21 @@ class PrintOutAbstract:
             cls.yes_or_no(False)
         ))
 
-        cls.header("This is a 'header'.")
+        cls.block_info("This is a 'block_info'")
+        cls.title_info("This is a 'title_info'")
+        cls.info("This is a 'info'")
 
-        cls.title_info("This is a 'title_info' title.")
+        cls.block_success("This is a 'block_success'")
+        cls.title_success("This is a 'title_success'")
+        cls.success("This is a 'success'")
 
-        cls.info("This is an 'info' line.")
+        cls.block_warning("This is a 'block_warning'")
+        cls.title_warning("This is a 'title_warning'")
+        cls.warning("This is a 'warning'")
 
-        cls.title_warning("This is a 'title_warning' title.")
-
-        cls.warning("This is a 'warning' line.")
-
-        cls.title_error("This is a 'title_error' title.")
-
-        cls.error("This is a 'error' line.")
-
-        cls.dotitem("This is a 'dotitem' line.")
-
-        cls.treeitem("This is a 'treeitem' line.")
-
-        cls.treeitem("This is a 'treeitem' line with ends=True.", ends=True)
-
-        cls.treelist(["First item with treelist", "Another one"])
-
-        cls.success("This is a 'success' block.")
+        cls.block_error("This is a 'block_error'")
+        cls.title_error("This is a 'title_error'")
+        cls.error("This is a 'error'")
 
         try:
             cls.critical(
@@ -304,3 +349,9 @@ class PrintOutAbstract:
             )
         except Exit:
             pass
+
+        cls.dotitem("This is a 'dotitem' line.")
+
+        cls.treeitem("This is a 'treeitem' line.")
+        cls.treeitem("This is a 'treeitem' line with ends=True.", ends=True)
+        cls.treelist(["First item with treelist", "Another one"])
